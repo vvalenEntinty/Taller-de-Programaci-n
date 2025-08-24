@@ -1,0 +1,82 @@
+
+program ejercicio3;
+const
+	max_genero=8;
+type
+	rango_genero=1..max_genero;
+
+	pelicula=record
+		codigo:integer;
+		genero:rango_genero;
+		puntajeProm:real;
+	end;
+	
+	lista=^nodo;
+	nodo=record
+		dato:pelicula;
+		sig:lista;
+	end;
+	
+	vector_listas=array[rango_genero] of lista;
+	
+
+	
+	procedure leerPelicula (var p:pelicula);
+	begin
+		writeln('Ingresar el codigo de pelicula');readln(p.codigo);
+		writeln('Ingresar el genero');readln(p.genero);
+		writeln('Ingresar el puntaje promedio');readln(p.puntajeProm);
+	end;
+			
+	procedure AgregarAtras (var l,ult:lista; p:pelicula);
+	var
+		nue:lista;
+	begin
+		new (nue);
+		nue^.dato:=p;
+		nue^.sig:=nil;
+		if (l=nue)then
+			ult^.sig:=nue;
+		ult:=nue;
+	end;
+	
+	procedure cargarPeliculas (var v:vector_listas);
+	var
+		ult:lista;
+		p:pelicula;
+	begin
+		for i := 1 to max_genero do
+		begin
+			v[i]:=nil;
+			ult[i]:=nil;
+		end;
+	
+		LeerPelicula(p);
+		while (p.codigo <> - 1) do
+		begin
+			AgregarAtras(v[p.genero],ult[p.genero],p);
+			v[p.genero]:=
+			LeerPelicula(p);
+		end;
+	end;
+	
+	procedure imprimir (v:vector_listas);
+	var
+		i:integer;
+		aux:lista;
+	begin
+		for i := 1 to max_genero do begin
+			aux:=v[i];
+			while (aux<>nil) do begin
+				writeln('Codigo ',aux^.dato.codigo);
+				aux:=aux^.sig;
+			end;
+		end;
+	end;	
+	
+var
+	vector:vector_listas;
+begin
+	cargarPeliculas(vector);
+	Imprimir(vector);
+end.
