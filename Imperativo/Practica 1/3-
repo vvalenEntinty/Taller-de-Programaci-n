@@ -28,7 +28,7 @@ type
 			
 	procedure AgregarAtras (var l,ult:lista; p:pelicula);
 	var
-		nue:vector;
+		nue:lista;
 	begin
 		new (nue);
 		nue^.dato:=p;
@@ -96,15 +96,43 @@ type
 	
 	procedure ordenarPeliculas (var v:vector_pelis);
 	var
-		i,j:rango_genero;
+		i,j,pos:rango_genero;
+		item:pelicula;
 	begin
 		for i :=  1 to max_genero-1 do
 		begin
-		
+			pos:=i;
 			for j:= i to max_genero do
-		
-		
+				if (v[i].puntajeProm < v[pos].puntajeProm) then
+					pos:=j;
+				item:=v[pos];
+				v[pos]:=v[i];
+				v[i]:=item;
 		end;
+	end;
+	
+	procedure buscarMaxMin (v:vector_pelis);
+	var
+		max,min:real;
+		codmin,codmax:integer;
+		i:rango_genero;
+	begin
+			max:=-9999;
+			min:=9999;
+			for i := 1 to max_genero do 
+			begin
+				if (v[i].puntajeProm > max) then 
+				begin
+					max:=v[i].puntajeProm;
+					codMax:=v[i].codigo;
+				end;
+				if (v[i].puntajeProm < min) then 
+				begin
+					min:=v[i].puntajeProm;
+					codMin:=v[i].codigo;
+				end;
+			end;
+			writeln('codigo con mayor puntaje: ',codmax, ' codigo con menor puntaje: ',codmin);
 	end;
 	
 var
@@ -114,7 +142,5 @@ begin
 	cargarPeliculas(vecPeliculas);
 	mayorPuntaje(vecPeliculas,vecPelisMax);
 	ordenarPeliculas(vecPelisMax);
-	
-	
-	{Imprimir(vector);}
+	buscarMaxMin(vecPelisMax);
 end.
