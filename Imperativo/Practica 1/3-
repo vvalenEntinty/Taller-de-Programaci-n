@@ -1,4 +1,3 @@
-
 program ejercicio3;
 const
 	max_genero=8;
@@ -18,8 +17,7 @@ type
 	end;
 	
 	vector_listas=array[rango_genero] of lista;
-	
-
+	vector_pelis=array [rango_genero] of pelicula;
 	
 	procedure leerPelicula (var p:pelicula);
 	begin
@@ -30,7 +28,7 @@ type
 			
 	procedure AgregarAtras (var l,ult:lista; p:pelicula);
 	var
-		nue:lista;
+		nue:vector;
 	begin
 		new (nue);
 		nue^.dato:=p;
@@ -40,43 +38,83 @@ type
 		ult:=nue;
 	end;
 	
-	procedure cargarPeliculas (var v:vector_listas);
+	procedure inicializarVector (var v:vector_listas);
 	var
-		ult:lista;
-		p:pelicula;
+		i:rango_genero;
 	begin
 		for i := 1 to max_genero do
 		begin
 			v[i]:=nil;
-			ult[i]:=nil;
 		end;
+	end;
 	
+	
+	procedure cargarPeliculas (var v:vector_listas);
+	var
+		ult:vector_listas;
+		p:pelicula;
+	begin
+		inicializarVector(v); {inicializo todas las posiciones del vector en nil}
+
 		LeerPelicula(p);
 		while (p.codigo <> - 1) do
 		begin
-			AgregarAtras(v[p.genero],ult[p.genero],p);
-			v[p.genero]:=
+			AgregarAtras(v[p.genero],ult[p.genero],p); {cargo por orden de llegada en el vector}
 			LeerPelicula(p);
 		end;
 	end;
 	
-	procedure imprimir (v:vector_listas);
+
+	
+	procedure calcularMaximo (l:lista; var peliMax:pelicula);
 	var
-		i:integer;
-		aux:lista;
+		max:real;
 	begin
-		for i := 1 to max_genero do begin
-			aux:=v[i];
-			while (aux<>nil) do begin
-				writeln('Codigo ',aux^.dato.codigo);
-				aux:=aux^.sig;
-			end;
+	max:=-9999;
+		while (l<>nil) do
+		begin
+			if (l^.dato.puntajeProm > max) then
+			begin
+				max:=l^.dato.puntajeProm;
+				peliMax:=l^.dato;
+			end;	
+			l:=l^.sig;
 		end;
-	end;	
+	end;
+	
+	procedure MayorPuntaje (v:vector_listas; var vPuntaje:vector_pelis);
+	var
+		i:rango_genero;
+		peliMax:pelicula;
+	begin
+		for i := 1 to max_genero do
+		begin
+			calcularMaximo(v[i],peliMax);
+			vPuntaje[i]:=peliMax;
+		end;
+	end;
+	
+	procedure ordenarPeliculas (var v:vector_pelis);
+	var
+		i,j:rango_genero;
+	begin
+		for i :=  1 to max_genero-1 do
+		begin
+		
+			for j:= i to max_genero do
+		
+		
+		end;
+	end;
 	
 var
-	vector:vector_listas;
+	vecPeliculas:vector_listas;
+	vecPelisMax:vector_pelis;
 begin
-	cargarPeliculas(vector);
-	Imprimir(vector);
+	cargarPeliculas(vecPeliculas);
+	mayorPuntaje(vecPeliculas,vecPelisMax);
+	ordenarPeliculas(vecPelisMax);
+	
+	
+	{Imprimir(vector);}
 end.
