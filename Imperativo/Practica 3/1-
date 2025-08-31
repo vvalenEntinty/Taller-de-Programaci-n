@@ -1,0 +1,60 @@
+Program Clase2MI;
+const dimF = 15;
+      min = 10;
+      max = 155;
+type vector = array [1..dimF] of integer;
+     
+
+  procedure CargarVectorRecursivo (var v: vector; var dimL: integer);
+  var valor: integer;
+  begin
+    valor:= min + random (max - min + 1);
+    if ((valor <> 20 ) and (dimL < dimF)) 
+    then begin
+          dimL:= dimL + 1;
+          v[dimL]:= valor;
+          CargarVectorRecursivo (v, dimL);
+         end;
+  end;
+
+procedure ImprimirVectorRecursivo (v: vector; dimL: integer);
+begin    
+	if (diml > 0) then
+     imprimirVectorRecursivo (v,diml-1);
+	 writeln(v[diml]);
+end; 
+
+function  BuscarValor (v: vector; dimL, valor: integer): boolean;
+begin
+	if (diml>0) then 
+	if(v[diml] = valor) then
+		BuscarValor:=true
+	else
+		BuscarValor:=BuscarValor(v,diml-1,valor);
+end; 
+
+procedure imprimirdigito (num:integer);
+var
+	dig:integer;
+begin
+	if (num > 0) then begin
+		dig:=num mod 10;
+		imprimirdigito((num div 10));
+		writeln(dig);
+	end;
+end;
+
+
+var
+	v:vector;
+		num,valor,diml:integer;
+
+BEGIN
+diml:=1;
+	{CargarVectorRecursivo (v,diml);
+	ImprimirVectorRecursivo(v,diml);
+	readln(valor);
+	writeln(BuscarValor(v,diml,valor));}
+	readln(num);
+	imprimirdigito(num);
+END.
