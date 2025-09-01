@@ -1,0 +1,84 @@
+program ejercicio;
+type
+	lista=^nodo;
+		nodo=record
+			dato:integer;
+			sig:lista;
+		end;
+	
+	procedure agregar (var l:lista; num:integer);
+	var
+			nue:lista;
+	begin
+		new(nue);
+		nue^.dato:=num;
+		nue^.sig:=l;
+		l:=nue;
+	end;
+		
+	procedure cargarlista (var l:lista);
+	var
+		num:integer;
+	begin
+		num:=100+random((200-100)+1);
+		if (num = 100) then
+			agregar(l,100)
+		else begin
+			agregar(l,num);
+			cargarlista(l);
+		end;
+	end;
+		
+	procedure imprimir (l:lista);
+	begin
+		if (l<>nil) then begin
+			writeln(l^.dato);
+			imprimir(l^.sig);
+		end;
+	end;	
+	
+procedure imprimirInverso (l:lista);
+begin
+	if (l<>nil) then begin
+		imprimirInverso(l^.sig);
+	writeln(l^.dato);
+end;
+end;	
+		
+procedure  minimo (l:lista;var min:integer);
+begin
+	if (l<>nil) then begin
+		if (l^.dato < min) then
+			min:=l^.dato;
+		minimo(l^.sig,min);
+	end;
+end;
+
+function buscarValor(l: lista; num: integer): boolean;
+begin
+  if (l = nil) then
+    buscarValor := false
+  else if (l^.dato = num) then
+    buscarValor := true
+  else
+    buscarValor := buscarValor(l^.sig, num);
+end;
+
+
+var
+	l:lista;
+	min,valor:integer;
+begin
+	min:=9999;
+	l:=nil;
+	randomize;
+	cargarlista(l);
+		imprimir(l);
+	writeln('-------------------');
+		imprimirInverso(l);
+	writeln('-------------------');
+	minimo(l,min);
+		writeln('valor mas chico: ',min);
+		readln(valor);
+		writeln('El valor esta en la lista? ',buscarValor (l,valor));
+end.
