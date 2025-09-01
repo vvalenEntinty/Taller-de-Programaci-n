@@ -1,0 +1,43 @@
+4.- Realizar un programa que lea números y que utilice un módulo recursivo que escriba el 
+equivalente en binario de un número decimal. El programa termina cuando el usuario ingresa 
+el número 0 (cero).  
+Ayuda:  Analizando las posibilidades encontramos que: Binario (N) es N si el valor es menor a 2. 
+¿Cómo obtenemos los dígitos que componen al número? ¿Cómo achicamos el número para la 
+próxima llamada recursiva? Ejemplo: si se ingresa 23, el programa debe mostrar: 10111. }
+
+program ejercicio;
+
+function darVuelta (num:integer):boolean;
+var
+	dig:integer;
+	suma:integer;
+begin
+	while (num<>0) do 
+	begin
+		dig:=num mod 10;
+		suma:=dig +  ;
+		num:=num div 10;
+	end;
+end;
+
+procedure convertirNum (var num:integer);
+var
+	dig:integer;
+begin
+	dig := num mod 2;
+	write(dig);
+	num := num div 2;
+	if (num <> 0) then convertirNum(num);
+end;	
+
+var
+	num,num1:integer;
+begin
+	readln(num);
+	while (num <> 0) do begin  
+		writeln('Numero en binario: '); convertirNum(num);
+		readln(num);
+	end;
+	read(num1);
+	writeln('inverso: ',darVuelta(num1);
+end.
