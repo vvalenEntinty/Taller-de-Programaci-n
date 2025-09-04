@@ -1,0 +1,98 @@
+program ejercicio;
+type
+    // registro del arbol I
+    venta=record
+	codigo:integer;
+    end;
+  
+    // Declaracion del arbol I
+    arbolI=^nodo;
+    
+    nodo=record
+	dato:venta;
+	HI:arbolI;
+	HD:arbolI;
+    end;
+    
+    // registro del arbol II
+    regArbolII=record
+	codigo:integer;
+	totalVendidas:integer;
+    end;
+    
+    // Declaracion del arbol II
+    arbolII=^nodo;
+    
+    nodo=record
+	dato:
+	HI:arbolII;
+	HD:arbolII;
+    end;
+    
+procedure leerVenta (var v:venta);
+begin
+    v.codigo:=random(100);
+    if (v.codigo <> 0) then
+    begin
+	v.fecha:=random(10);
+	v.cantVendidas:=random(200);
+    end;
+end;
+
+procedure cargarArbolI (var aI:arbolI; v:venta);
+begin
+    if (aI=nil) then 
+    begin
+	new(aI);
+	aI^.dato:=v;
+	aI^.HI:=nil;
+	aI^.HD:=nil;
+    end
+    else
+	if ( v.codigo < aI^.dato.codigo)then
+	    cargarArbolI(aI^.HI,v)
+	else
+	if ( v.codigo >= aI^.dato.codigo) then
+	    cargarArbolI(aI^.HD,v);
+    end;
+
+procedure generarArboles (var a:arbolI);
+var
+    v:venta;
+begin
+    leerVenta(v);
+    if (v.codigo <> 0) then begin
+	cargarArbolI(a,v);
+	generarArbolI(a);    
+    end;
+end;
+
+
+procedure enOrden (a:arbolI);
+
+procedure imprimirVenta(v:venta);
+begin
+    	write('Codigo: ');writeln(v.codigo);
+	write('fecha: ');writeln(v.fecha);
+	write('cantidad vendidas: ');writeln(v.cantVendidas);
+	writeln('///////////////////////////////////////////');
+end;
+
+begin
+    if(a<>nil) then
+    begin
+	enOrden(a^.HI);
+	imprimirVenta(a^.dato);
+	enOrden(a^.HD);
+    end;
+end; 
+
+var
+    aI:arbolI;
+    aII:arbolII;
+    aIII:arbolIII;
+begin
+    randomize;
+    generarArboles(aI,aII,aIII);
+    enOrden(aI); // Imprime el arbol I
+end.
