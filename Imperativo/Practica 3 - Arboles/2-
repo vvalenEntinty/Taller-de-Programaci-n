@@ -31,22 +31,22 @@ type
 	end;	
 {---------------------------------------}	
 		// lista de ventas realizadas
-		lista_ventas=^nodo;
+		lista=^nodo;
 		nodo=record
 			dato:venta;
-			sig:lista_ventas;
+			sig:lista;
 		end;
 		
 		// registro para el arbol iii
 		reg_iii=record
 		codigo:integer;
-		cant_vendidasTotal:lista_ventas;
+		lista:lista;
 	end;	
 	
 	// segundo arbol	
 	arbol_iii =^nodo_iii;
 	nodo_iii=record
-		dato:reg_ii;
+		dato:reg_iii;
 		hi:arbol_iii;
 		hd:arbol_iii;
 	end;	
@@ -76,44 +76,145 @@ begin
 				cargarArbol_i(ai^.hd,v);
 end;
 
-procedure cargarArbol_ii (var aii:arbol_ii; v:venta);
+
+
+procedure cargarArbol_ii (var aii:arbol_ii; cod,cant:integer);
 begin
 	if (aii =nil) then
 	begin
 		new(aii);
-		aii^.dato.codigo:=v.codigo;
-		aii^.dato.cant_vendidasTotal:=v.cant_vendidas;
+		aii^.dato.codigo:=cod;
+		aii^.dato.cant_vendidastotal:=cant;
 		aii^.hi:=nil;
 		aii^.hd:=nil
 	end
 	else
-		if (v.codigo < aii^.dato.codigo) then 
-			cargarArbol_ii(aii^.hi,v)
-			else 
-				cargarArbol_ii(aii^.hd,v);
+		if (cod < aii^.dato.codigo) then 
+			cargarArbol_ii(aii^.hi,cod,cant)
+			else if (cod > aii^.dato.codigo) then
+				cargarArbol_ii(aii^.hd,cod,cant)
+			else
+				aii^.dato.cant_vendidasTotal := aii^.dato.cant_vendidasTotal + cant;
 end;
 
+procedure agregarAdelante (var l:lista; v:venta);
+var
+	nue:lista;
+begin
+	new(nue);
+	nue^.dato:=v;
+	nue^.sig:=l;
+	l:=nue;
+end;
 
-// cargarArbol_i	
+procedure cargarArbol_iii (var aiii:arbol_iii; v:venta);
+begin	
+	if (aiii=nil) then
+	begin
+		new(aiii);
+		aiii^.dato.codigo:=v.codigo;
+		aiii^.dato.lista:=nil;
+		aiii^.HI:=nil;
+		aiii^.HD:=nil;
+		agregarAdelante(aiii^.dato.lista,v);
+	end
+	else
+			if (v.codigo < aiii^.dato.codigo) then
+				cargarArbol_iii(aiii^.HI,v)
+			else if (v.codigo > aiii^.dato.codigo) then
+					cargarArbol_iii(aiii^.HD,v)
+			else if (v.codigo = aiii^.dato.codigo) then
+					agregarAdelante(aiii^.dato.lista, v);
+end;
+	
 var
 	v:venta;
 begin
+	ai:=nil;
+	aii:=nil;
+	aiii:=nil;
+	
 	leerVentas(v);
-	if (v.codigo <> 0) then 
+	while (v.codigo <> 0) do begin
 		cargarArbol_i(ai,v);
-		cargarArbol_ii(ai,v.codigo,v.cant_vendidas);
+		cargarArbol_ii(aii,v.codigo,v.cant_vendidas);
+		cargarArbol_iii(aiii,v);
+		leerVentas(v);
 	end;
 end;
 
+function contarVentasFecha_i(a:arbol_i; fecha:integer):integer;
+begin
+	if(a = nil) then
+		contarVentasFecha_i:=0
+	else
+		if (a^.dato.fecha = fecha) then 
+			contarVentasFecha_i:= 1+contarVentasFecha_i(a^.HI,fecha)+contarVentasFecha_i(a^.HD,fecha)
+			else
+				contarVentasFecha_i:= contarVentasFecha_i(a^.HI,fecha)+contarVentasFecha_i(a^.HD,fecha);
+	end;
 
 
+procedure maxVendidas (a:arbol_ii; var max:integer; var cod:integer);
+begin	
+	if (a<>nil) then begin
+		if (a^.dato.cant_vendidasTotal>max) then begin
+			max:=a^.dato.cant_vendidasTotal;
+			cod:=a^.dato.codigo;
+		end;
+			maxVendidas(a^.HI,max,cod);
+			maxVendidas(a^.HD,max,cod);
+		end;
+	end;
 
+procedure 	MaxVentas_Arboliii(a:arbol_iii;var max,cod:integer);
+procedure recorrerLista (l:lista; var max,cod:integer);
+begin
+	while (l<>nil) do 
+	begin
+		if (l^.dato.cant_vendidas > max) then
+		begin
+			max:=l^.dato.cant_vendidas;
+			cod:=l^.dato.codigo;
+		end;
+		l:=l^.sig;
+	end;
+end;
 
+begin
+	 if (a <> nil) then begin
+		recorrerLista(a^.dato.lista,max,cod);
+	MaxVentas_Arboliii(a^.HI,max,cod);
+	MaxVentas_Arboliii(a^.HD,max,cod);
+end;
+end;
+
+ // Programa Principal
 var
 	ai:arbol_i;
 	aii:arbol_ii;
 	aiii:arbol_iii;
+	
+	fecha_i:integer;
+	maxiii,max,cod,codiii:integer;
 begin
+	max:=-1;
+	maxiii:=-1;
+	cod:=0;
+	codiii:=0;
 	randomize;
-	cargarArboles(ai,aii,aii);
+	cargarArboles(ai,aii,aiii);
+	writeln('------ Punto A ------');
+	writeln('Ingresar una fecha: '); readln(fecha_i);
+	writeln('Total de productos vendidos en la fecha ',fecha_i,': ',contarVentasFecha_i(ai,fecha_i));
+	writeln('');
+	maxVendidas(aii,max,cod);
+	writeln('------ Punto B ------');
+	writeln('Codigo del producto mas vendido ',cod, ' con ',max, ' unidades');
+	writeln('');
+	MaxVentas_Arboliii(aiii,maxiii,codiii);
+	writeln('------ Punto C ------');
+	writeln('Codigo del producto mas vendido ',codiii, ' con ',maxiii, ' unidades');
 end.
+
+
