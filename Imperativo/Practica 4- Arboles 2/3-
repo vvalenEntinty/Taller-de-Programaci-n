@@ -26,19 +26,29 @@ procedure cargarArbol (var a:arbol);
 
 procedure leerVenta (var v:venta);
 begin
-	v.cod_venta:=random(100);
+	writeln('Ingresar codigo de venta');readln(v.cod_venta);
+	if (v.cod_venta <> -1) then begin
+		writeln('Ingresar el codigo de propducto: ');readln(v.cod_prod);
+		writeln('Ingresar la cantidad vendidas: ');readln(v.cant_vendidas);
+		writeln('Ingresar el precio: ');readln(v.precio);
+	end;
+end;
+
+{procedure leerVenta (var v:venta);
+begin
+	v.cod_venta:=random(100)-1;
 	if (v.cod_venta <> -1) then begin
 		v.cod_prod:=random(100);
 		v.cant_vendidas:=random(100);
 		v.precio:=random(100);
 	end;
-end;
+end;}
 
 procedure cargarProducto (var p:producto; v:venta);
 begin
 	p.cod_prod:=v.cod_prod;
-	p.total_vendidas:=p.total_vendidas + v.cant_vendidas;
-	p.monto_total:=p.monto_total + (v.cant_vendidas*v.precio);
+	p.total_vendidas:= v.cant_vendidas;
+	p.monto_total:=v.cant_vendidas*v.precio;
 end;
 
 
@@ -54,35 +64,51 @@ begin
 		a^.HI:=nil;
 		a^.HD:=nil;
 	end
-	else
-		if (p.cod_prod < a^.dato.cod_prod) then
+	else begin
+		if (a^.dato.cod_prod = p.cod_prod) then
+		begin
+			a^.dato.total_vendidas:=a^.dato.total_vendidas + p.total_vendidas;
+			a^.dato.monto_total:=a^.dato.monto_total+p.monto_total;
+		end
+		else if (a^.dato.cod_prod > p.cod_prod) then
 			generarNodo(a^.HI,p)
 			else
-			if (p.cod_prod > a^.dato.cod_prod) then
 				generarNodo(a^.HD,p)
-			else
-				
+	end;
 end;
 
 var
 	v:venta;
+	p:producto;
 begin
 	leerVenta(v);
 	while (v.cod_venta <> -1) do
 	begin
-		
+		cargarProducto(p,v);
 		generarNodo(a,p);
 		leerVenta(v);
 	end;	
 end;
 
+procedure imprimir (a:arbol);
+begin
+	if (a <> nil) then begin
+	writeln('Codigo de venta: ',a^.dato.cod_prod);
+	writeln('total vendidas: ',a^.dato.total_vendidas);
+	writeln('monto total: ',a^.dato.monto_total:0:2);
+	writeln('-------------------------------');
+	imprimir(a^.HI);
+	imprimir(a^.HD);
+	end;
+end;
+
 // programa princial
 
 var
-	a:arbo;
+	a:arbol;
 begin
 	a:=nil;
 	randomize;
 	cargarArbol(a);
-
+	imprimir (a);
 end.
