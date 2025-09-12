@@ -162,7 +162,7 @@ begin
 	
 end;
 
-procedure VectorRecursivo (vL: vectorLista;var i:integer; var max:integer; var diag:integer);
+procedure VectorRecursivo (vL: vectorLista; pos:integer; var max:integer; var diag:integer);
 
 procedure RecorrerLista (l:lista; i:integer; var max:integer; var diag:integer);
 var
@@ -182,22 +182,21 @@ begin
 end;
 
 begin
-	if (i <= 6) then begin
-		RecorrerLista(vL[i],i,max,diag);
-	i:=i+1;
-	VectorRecursivo(vL,i,max,diag);
+	if (pos <= 6) then begin
+		RecorrerLista(vL[pos],pos,max,diag);
+	VectorRecursivo(vL,pos+1,max,diag);
 	end;
-	
 end;
 
 var
 	aM: arbol;
 	vL:vectorLista;
-	i,max,diag:integer;
+	pos,max,diag:integer;
 	matriBuscar:integer;
 begin
-	i:=1;
+	pos:=1;
 	max:=-1;
+	diag:=0;
 	randomize;
 	cargarArbol(aM,vL);
 	imprimirArbol(aM);
@@ -205,7 +204,7 @@ begin
 	imprimirVector(vL);
 	writeln('Ingresar una matricula para contar el total');readln(matriBuscar);
 	writeln('La cantidad Total es: ',contadorTotal(aM,matriBuscar));
-	VectorRecursivo(vL,i,max,diag);
-	writeln('El diagnostico con mas pacientes atendidos es : ',diag);
+	vectorRecursivo (vL,pos,max,diag);
+	writeln('El diagnostico es: ',diag);
+	
 end.
-
