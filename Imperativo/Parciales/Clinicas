@@ -1,0 +1,176 @@
+{Una clínica necesita un sistema para el procesamiento de las atenciones realizadas a los pacientes en julio de 2024.
+a) Implementar un módulo que lea información de las atenciones. De cada atención se lee: matrícula del médico, DNI del paciente,
+día y diagnóstico (valor entre A y F). La lectura finaliza con DNI = 0. Se sugiere utilizar el módulo leerAtención(). El módulo debe
+retornar dos estructuras:
+i. Un árbol binario de búsqueda ordenado por matrícula del médico. Para cada matrícula de médico debe almacenarse la cantidad
+de atenciones realizadas.
+ii. Un vector que almacene por cada diagnóstico posible el tipo del género y la lista de los DNI de pacientes atendidos con ese
+diagnóstico.
+b) Implementar un módulo que reciba el árbol generado en a) y una matrícula y retorne la cantidad total de atenciones realizadas
+por los médicos con matrícula superior a la matrícula ingresada.
+c) Realizar un módulo recursivo que reciba el vector generado en a) y retorne el diagnóstico con mayor cantidad de pacientes
+atendidos.
+NOTA: Implementar el programa principal, que invoque a los incisos a, b y c. En caso de ser necesario, puede utilizar los módulos
+que se encuentran a continuación.}
+
+program ejercicio;
+type
+
+	rango_diag=1..6;
+
+	atencion=record 
+		matricula:integer;
+		dni:integer;
+		dia:integer;
+		diag:rango_diag;
+	end;
+	
+	medico=record
+		matricula:integer;
+		atendidos:integer;
+	end;
+	
+	
+	arbol=^nodo;
+	nodo=record
+			dato:medico;
+			hi:arbol;
+			hd:arbol;
+	end;
+		
+		
+	lista=^nodoL;
+	nodoL = record
+		dni: integer;
+		sig: lista; 
+	end;	
+	
+	
+	vectorLista = array [rango_diag] of lista;
+	
+	
+procedure cargarArbol (var aM: arbol; var v:vectorLista);
+
+
+procedure LeerAtencion (var a:atencion);
+begin
+	a.dni:=random(20);
+	if (a.dni <> 0) then begin
+	a.matricula:= random(30);
+	a.dia:=random(31);
+	a.diag:=1+random(6+1-1);
+	end;
+end;
+
+procedure guardarMedico(var  m:medico; matri:integer);
+begin
+	m.matricula:=matri;
+	m.atendidos:=1;
+end;
+
+procedure generarNodo (var a:arbol; m:medico);
+begin
+	if (a = nil) then 
+	begin
+		new(a);
+		a^.dato.matricula:=m.matricula;
+		a^.dato.atendidos:=m.atendidos;
+		a^.HI:=nil;
+		a^.HD:=nil;
+	end
+	else 
+		if (a^.dato.matricula =m.matricula) then
+			a^.dato.atendidos:=a^.dato.atendidos + 1
+	else 
+		if (a^.dato.matricula > m.matricula) then
+			generarNodo(a^.HI,m)
+			else
+				generarNodo(a^.HD,m);
+	end;		
+	
+procedure InicializarVectorL (var vL: vectorLista);
+var
+	i: rango_diag;
+begin
+	for i:= 1 to 6 do
+		vL[i]:= nil;
+end;	
+
+procedure AgregarAdelante(var l:lista; dni:integer);
+var
+	nue:lista;
+begin
+	new(nue);
+	nue^.dni:=dni;
+	nue^.sig:=l;
+	l:=nue;
+end;
+
+
+var
+		ate:atencion;
+		m:medico;
+
+begin
+		inicializarVectorL(v);
+		LeerAtencion(ate);
+		while (ate.dni <> 0) do 
+		begin
+			guardarMedico(m,ate.matricula);
+			generarNodo(aM,m);
+			AgregarAdelante(v[ate.diag],ate.dni);
+		LeerAtencion(ate);
+		end;
+end;
+
+procedure imprimirArbol( a:arbol);
+begin
+	if(a<>nil) then  begin
+	writeln('Matricula: ',a^.dato.matricula);
+	writeln('Personas Atendidas: ',a^.dato.atendidos);
+	imprimirArbol(a^.HI);
+	imprimirArbol(a^.HD);
+	end;
+end;
+
+procedure imprimirVector (v:vectorLista);
+var
+	i:rango_diag;
+begin
+	for i := 1  to 6 do
+	begin
+	writeln('------ Diagnostico ',i, ' -----------');
+		while (v[i] <> nil) do 
+		begin
+			writeln('Dni: ',v[i]^.dni);
+			v[i]:=v[i]^.sig;
+		end;
+	end;
+end;
+
+function contadorTotal ( a:arbol; matri:integer):integer;
+begin
+	if (a <> nil) then
+	begin
+		if (a^.dato.matricula > matri) then
+			contadorTotal:= 1+ contadorTotal(a^.HI,matri) + contadorTotal(a^.HD,matri)
+			else
+				contadorTotal:= contadorTotal(a^.HI,matri) + contadorTotal(a^.HD,matri)
+					else
+						contadorTotal:=0;
+	end;
+end;
+
+var
+	aM: arbol;
+	vL:vectorLista;
+	matriBuscar:integer;
+begin
+	randomize;
+	cargarArbol(aM,vL);
+	imprimirArbol(aM);
+	writeln('////////////////////////////');
+	imprimirVector(vL);
+	writeln('Ingresar una matricula para contar el total');readln(matriBuscar);
+	writeln('La cantidad Total es: ',contadorTotal(aM,matriBuscar));
+end.
