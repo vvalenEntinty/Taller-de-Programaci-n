@@ -127,6 +127,7 @@ procedure imprimirArbol( a:arbol);
 begin
 	if(a<>nil) then  begin
 	writeln('Matricula: ',a^.dato.matricula);
+	writeln();
 	writeln('Personas Atendidas: ',a^.dato.atendidos);
 	imprimirArbol(a^.HI);
 	imprimirArbol(a^.HD);
@@ -150,22 +151,53 @@ end;
 
 function contadorTotal ( a:arbol; matri:integer):integer;
 begin
-	if (a <> nil) then
-	begin
+	if (a = nil) then
+		contadorTotal:=0
+		else
+	
 		if (a^.dato.matricula > matri) then
 			contadorTotal:= 1+ contadorTotal(a^.HI,matri) + contadorTotal(a^.HD,matri)
-			else
-				contadorTotal:= contadorTotal(a^.HI,matri) + contadorTotal(a^.HD,matri)
-					else
-						contadorTotal:=0;
+			else 
+				contadorTotal:= contadorTotal(a^.HI,matri) + contadorTotal(a^.HD,matri);
+	
+end;
+
+procedure VectorRecursivo (vL: vectorLista;var i:integer; var max:integer; var diag:integer);
+
+procedure RecorrerLista (l:lista; i:integer; var max:integer; var diag:integer);
+var
+	cont:integer;
+begin
+	cont:=0;
+	while (l<>nil) do 
+	begin
+		cont:=cont+1;
+		l:=l^.sig;
 	end;
+	if (cont > max)then
+	begin
+		max:=cont;
+		diag:=i;
+	end;
+end;
+
+begin
+	if (i <= 6) then begin
+		RecorrerLista(vL[i],i,max,diag);
+	i:=i+1;
+	VectorRecursivo(vL,i,max,diag);
+	end;
+	
 end;
 
 var
 	aM: arbol;
 	vL:vectorLista;
+	i,max,diag:integer;
 	matriBuscar:integer;
 begin
+	i:=1;
+	max:=-1;
 	randomize;
 	cargarArbol(aM,vL);
 	imprimirArbol(aM);
@@ -173,4 +205,7 @@ begin
 	imprimirVector(vL);
 	writeln('Ingresar una matricula para contar el total');readln(matriBuscar);
 	writeln('La cantidad Total es: ',contadorTotal(aM,matriBuscar));
+	VectorRecursivo(vL,i,max,diag);
+	writeln('El diagnostico con mas pacientes atendidos es : ',diag);
 end.
+
