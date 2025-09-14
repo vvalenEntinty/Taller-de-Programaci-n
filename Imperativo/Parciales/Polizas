@@ -1,0 +1,189 @@
+program ejercicio;
+const
+	dni_fin=-1;
+	min_anio=2000;
+	max_anio=2023;
+type
+	rango_anios=min_anio..max_anio;
+	poliza=record
+		dni:integer;
+		suma:real;
+		valor:real;
+		fecha:rango_anios;
+	end;
+	
+	arbol=^nodo;
+	nodo=record
+		dato:poliza;
+		HI:arbol;
+		HD:arbol;
+	end;
+	
+	lista=^nodoLista;
+	nodoLista=record
+		dato:poliza;
+		sig:lista;
+	end;
+	
+	vector=array [rango_anios] of lista;
+	
+	procedure cargarArbol (var a:arbol);
+	procedure leerpoliza(var p:poliza);
+	begin
+		p.dni:=random(10)-1;
+		if (p.dni <> dni_fin) then begin
+			p.suma:=random(50);
+			p.valor:=random(50);
+			p.fecha:=2000+random(2023-2000 + 1);
+		end;
+	end;
+	
+	procedure generarNodo (var a:arbol; p:poliza);
+	begin	
+	if (a = nil) then 
+	begin
+		new(a);
+		a^.dato:=p;
+		a^.HI:=nil;
+		a^.HD:=nil;
+	end
+	else
+		if (p.suma < a^.dato.suma) then
+			generarNodo(a^.HI,p)
+			else
+				generarNodo(a^.HD,p);
+	end;
+	
+	var
+		p:poliza;
+	begin
+		leerpoliza(p);
+		while (p.dni <> dni_fin) do
+		begin
+			generarNodo(a,p);
+			leerpoliza(p);
+		end;
+	end;
+	
+	procedure inicializarVector (var v:vector);
+	var
+		i:rango_anios;
+	begin
+		for i := min_anio to max_anio do
+			v[i]:=nil;
+	end;
+	
+	procedure cargarVector (var v:vector; a:arbol; valor:integer);
+	
+	procedure insertarOrdenado (var l:lista; p:poliza);
+	var
+		ant,act,nue:lista;
+	begin
+		new(nue);
+		nue^.dato:=p;
+		ant:=l;
+		act:=l;
+		while(act <> nil) and (act^.dato.dni <p.dni) do 
+		begin
+			ant:=act;
+			act:=act^.sig;
+		end;
+		if (act = l) then	
+			l:=nue
+			else
+				ant^.sig:=nue;
+			nue^.sig:=act;
+	end;
+	
+	begin
+		if(a<>nil) then
+		begin
+			if (a^.dato.suma < valor) then begin
+				insertarOrdenado(v[a^.dato.fecha],a^.dato);
+			end;
+			cargarVector(v,a^.HI,valor);
+			cargarVector(v,a^.HD,valor);
+		end;
+	end;
+	
+procedure imprimirArbol(a:arbol);
+begin
+if (a <> nil) then begin
+	writeln('dni: ',a^.dato.dni);
+	writeln('suma: ',a^.dato.suma:0:2);
+	writeln('valor: ',a^.dato.valor:0:2);
+	writeln('fecha: ',a^.dato.fecha);
+	writeln('----------------------------');
+	imprimirArbol(a^.HI);
+	imprimirArbol(a^.HD);
+end;
+end;	
+	
+procedure imprimirVector (v:vector);
+procedure imprimirLista (l:lista);
+begin
+	if (l=nil) then
+		writeln(' ////////// VACIO //////////');
+	while (l<> nil) do
+	begin
+		writeln('--------------------------');
+
+		writeln('dni: ',l^.dato.dni);
+	writeln('suma: ',l^.dato.suma:0:2);
+	writeln('valor: ',l^.dato.valor:0:2);
+	writeln('fecha: ',l^.dato.fecha);
+	writeln('--------------------------');
+		l:=l^.sig;
+	end;
+end;
+var
+	i:rango_anios;
+begin
+	 for i := min_anio to max_anio do 
+	 begin
+		writeln('[[[[[[[[[ ANIO ',i, ' ]]]]]]]]]');
+		imprimirLista(v[i]);
+	 end;
+end;
+
+procedure cantidadPolizas (v:vector; dniB:integer);
+procedure recorrerLista(l:lista; dni:integer; var cantP:integer);
+begin
+	while (l<> nil) and (l^.dato.dni <= dni) do 
+	begin
+		if (l^.dato.dni = dni) then
+			cantP:=cantP + 1;
+		l:=l^.sig;
+	end;
+end;
+
+var
+	cantP:integer;
+	i:rango_anios;
+begin
+	cantP:=0;
+	for i := min_anio to max_anio do 
+	begin
+		recorrerLista(v[i],dniB,cantP);
+	end;
+	writeln('cantidad de Polizas del dni ',dniB,' es:  ',cantP);
+end;	
+
+var
+	a:arbol;
+	v:vector;
+	valor,dniBuscar:integer;
+begin
+	a:=nil;
+	randomize;
+	cargarArbol(a);
+	imprimirArbol (a); 	// IMPRIMIR ARBOL
+	inicializarVector(v);
+	writeln('Ingresar un valor: ');readln(valor);
+	cargarVector(v,a,valor);
+	imprimirVector(v); // IMPRIMIR VECTOR
+	writeln('Ingresar un DNI: ');readln(dniBuscar);
+	cantidadPolizas(v,dniBuscar);
+	
+end.
+	
