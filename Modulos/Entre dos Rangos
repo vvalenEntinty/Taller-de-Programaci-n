@@ -1,0 +1,15 @@
+procedure dosRangos (min,max:integer; a:arbol; var cont:integer);
+begin
+	if (a<>nil) then
+		if (a^.dato.cod_autor >= min) then
+			if (a^.dato.cod_autor <= max) then
+			begin
+				dosRangos(min,max,a^.HI,cont);
+				cont:=cont + 1;
+				dosRangos(min,max,a^.HD,cont);
+			end
+			else
+				dosRangos(min,max,a^.HI,cont)
+		else
+			dosRangos (min,max,a^.HD,cont);
+end;
