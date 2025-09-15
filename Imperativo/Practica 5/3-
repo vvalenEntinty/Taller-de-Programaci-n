@@ -1,0 +1,106 @@
+program ejercicioDos;
+type
+	compra=record
+		cod_juego:integer;
+		cod_cliente:integer;
+		mes:integer;
+	end;
+	
+	lista_meses=^nodo_lista;
+	nodo_lista=record
+		dato:integer;
+		sig:lista_meses;
+	end;
+
+	cliente=record
+		cod_cliente:integer;
+		meses:lista_meses;
+	end;
+	
+	arbol=^nodo;
+	nodo=record
+		dato:cliente;
+		HI:arbol;
+		HD:arbol;
+	end;
+	
+procedure cargarArbol (var a:arbol);
+
+procedure leerCompra( var c:compra);
+begin
+	c.cod_cliente:=random(20);
+	if (c.cod_cliente <> 0) then begin
+		c.cod_juego:=random(100);
+		c.mes:=1+random(30-1+1);
+	end;
+end;
+
+procedure agregarAdelante(var l:lista_meses; mes:integer);
+var
+	nue:lista_meses;
+begin
+	new(nue);
+	nue^.dato:=mes;
+	nue^.sig:=l;
+	l:=nue;
+end;
+
+procedure generarNodo (var a:arbol; c:compra);
+begin
+	if (a=nil) then
+	begin
+		new(a);
+		a^.dato.cod_juego:=c.cod_juego;
+		a^.dato.meses:=nil;
+		agregarAdelante ();
+		a^.HI:=nil;
+		a^.HD:=nil;
+	end
+	else
+		if (cod=a^.dato.cod_juego) then
+			agregarAdelante (a^.dato.meses,mes)
+			else		
+			if (cod < a^.dato.cod_juego) then
+				generarNodo(a^.HI,cod,mes)
+				else
+					generarNodo(a^.HD,cod,mes);
+end;
+
+var
+	c:compra;
+begin
+	leerCompra(c);
+	while (c.cod_cliente <> 0) do 
+	begin
+		generarNodo(a,c.cod_cliente,c.mes);
+		leerCompra(c);
+	end;
+end;
+
+procedure imprimir (a:arbol);
+procedure recorrerLista (l:lista_meses);
+begin
+	while (l<>nil ) do
+	begin
+		writeln('Mes: ',l^.dato);
+		l:=l^.sig;
+	end;
+end;
+
+begin
+	if (a<>nil) then begin
+		writeln('Codigo del cliente: ',a^.dato.cod_cliente);
+		recorrerLista(a^.dato.meses);
+		imprimir(a^.HI);
+		imprimir(a^.HD);
+	end
+end;
+
+var
+	a:arbol;
+begin
+	a:=nil;
+	cargarArbol(a);
+	imprimir (a);
+	
+end.
