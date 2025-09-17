@@ -1,0 +1,216 @@
+program parcial;
+const
+	maxRango=15;
+	isbnFin=0;
+type
+	rango_genero=1..maxRango;
+	
+	libro=record
+		isbn:integer;
+		cod_autor:integer;
+		cod_genero:rango_genero;
+	end;
+	
+	regLista=record
+		isbn:integer;
+		cod_genero:rango_genero;
+	end;
+	
+	lista=^nodoLista;
+	nodoLista=record
+		dato:regLista;
+		sig:lista;
+	end;
+		
+	regArbol=record
+		cod_autor:integer;
+		listaLibros:lista;
+	end;
+	
+	arbol=^nodo;
+	nodo=record
+		dato:regArbol;
+		HI:arbol;
+		HD:arbol;
+	end;
+	
+	regListaB=record
+		cod_autor:integer;
+		cant:integer;
+	end;
+
+	listaB=^nodoB;
+	nodoB=record
+		dato:regListaB;
+		sig:listaB;
+	end;
+
+procedure cargarArbol (var a:arbol);
+
+procedure leerLibro (var lib:libro);
+begin
+	lib.isbn:=random(50);
+	lib.cod_autor:=random(50);
+	lib.cod_genero:=1+random(15-1+1);
+end;
+
+procedure guardarRegLista (var reg:regLista; isbn,genero:integer);
+begin
+	reg.isbn:=isbn;
+	reg.cod_genero:=genero;
+end;
+
+procedure agregarAdelante (var l:lista; regL:regLista);
+var
+	nue:lista;
+begin
+	new(nue);
+	nue^.dato:=regL;
+	nue^.sig:=l;
+	l:=nue;
+end;
+
+procedure insertarArbol(var a:arbol; regL:regLista; autor:integer);
+begin
+	if (a=nil) then
+	begin
+		new(a);
+		a^.dato.cod_autor:=autor;
+		a^.dato.listaLibros:=nil;
+		a^.HI:=nil;
+		a^.HD:=nil;
+		agregarAdelante(a^.dato.listaLibros,regL);
+	end
+	else if (autor = a^.dato.cod_autor) then
+		agregarAdelante(a^.dato.listaLibros,regL)
+		else if (autor < a^.dato.cod_autor) then
+			insertarArbol(a^.HI,regL,autor)
+			else
+				insertarArbol(a^.HD,regL,autor);
+end;
+
+
+var
+	lib:libro;
+	regL:regLista;
+begin
+	leerLibro(lib);
+	while (lib.isbn <> isbnFin) do
+	begin
+		guardarRegLista(regL,lib.isbn,lib.cod_genero);
+		insertarArbol(a,regL,lib.cod_autor);
+		leerLibro(lib);
+	end;
+end;
+
+
+
+procedure imprimirArbol (a:arbol);
+procedure recorrerLista (l:lista);
+begin
+	while(l<>nil) do
+	begin
+		writeln('');
+		writeln('codigo de isbn: ',l^.dato.isbn);
+		writeln('codigo de genero: ',l^.dato.cod_genero);
+		l:=l^.sig;
+	end;
+end;
+
+begin
+	if (a<>nil) then
+	begin
+		imprimirArbol(a^.HI);
+		writeln('');
+		writeln('[--- codigo de autor: ',a^.dato.cod_autor, ' ---]');
+		recorrerLista(a^.dato.listaLibros);
+		imprimirArbol(a^.HD);
+	end;
+end;
+
+procedure retornarLista (a:arbol; codB,generoB:integer; var Lb:listaB);
+
+procedure agregarAdelanteB(var l:listaB; reg:regListaB);
+var
+	nue:listaB;
+begin
+	new(nue);
+	nue^.dato:=reg;
+	nue^.sig:=l;
+	l:=nue;
+end;
+
+procedure buscarEnLista (cod_autor:integer; l:lista; var lb:listaB; genero:integer);
+var
+	regLB:regListaB;
+begin
+	regLB.cod_autor:=cod_autor;
+	regLB.cant:=0;
+	while (l <>nil) do
+	begin
+		if (l^.dato.cod_genero =genero) then
+			regLB.cant:=regLB.cant+1;
+		l:=l^.sig;
+	end;
+	agregarAdelanteB(lb,regLB);
+end;
+
+begin
+	if (a<>nil) then
+	begin
+		if (a^.dato.cod_autor > codB) then
+			buscarEnLista(a^.dato.cod_autor, a^.dato.listaLibros,Lb,generoB);
+		retornarLista(a^.HI,codB,generoB,Lb);
+		retornarLista(a^.HD,codB,generoB,Lb);
+		end;
+	end;
+
+procedure imprimirNuevaLista( l:listaB);
+begin
+	while (l<>nil) do
+	begin
+		writeln('Codigo autor: ',l^.dato.cod_autor);
+		writeln('Cantidad de libros: ',l^.dato.cant);
+		writeln('');
+		l:=l^.sig;
+	end;
+end;
+
+procedure obtenerMayor (l:listaB; var cantMax,codMax:integer);
+begin
+	if (l<>nil) then
+	begin
+		if (l^.dato.cant > cantMax) then
+		begin
+			codMax:=l^.dato.cod_autor;
+			cantMax:=l^.dato.cant;
+		end;
+		obtenerMayor(l^.sig,cantMax,codMax);
+	end;
+end;
+
+// PROGRAMA PRINCIPAL
+var
+	a:arbol;
+	codB,generoB:integer;
+	Lb:listaB;
+	cantMax,codMax:integer;
+begin
+	a:=nil;
+	randomize;
+	cargarArbol(a);
+	imprimirArbol (a);
+	// PUNTO B
+	writeln('');
+	writeln('Ingresar un codigo de autor: ');readln(codB);
+	writeln('Ingresar un codigo de genero: ');readln(generoB);
+	retornarLista(a,codB,generoB,Lb);
+	writeln('--- Imprimir la Lista ---');
+	imprimirNuevaLista(lb);
+	writeln('---PUNTO C---');
+	cantMax:=-1;
+	codMax:=0;
+	obtenerMayor(lb,cantMax,codMax);
+	writeln('');
+	writeln('codigo del autor con mayor cantidad de ventas: ',codMax, ' cantidad: ',cantMax);
+end.
