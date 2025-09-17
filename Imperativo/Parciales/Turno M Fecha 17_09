@@ -1,0 +1,244 @@
+program TurnoM;
+const
+	dni_fin=0;
+	max_diag=10;
+type
+	rango_diag=1..max_diag;
+	rango_dia=1..31;
+	
+	
+	atencion=record
+		matricula:integer;
+		dni_paciente:integer;
+		dia:rango_dia;
+		diag:rango_diag;
+	end;
+	
+	regLista=record
+		dni_paciente:integer;
+		dia:rango_dia;
+		diag:rango_diag;
+	end;
+	
+	lista=^nodoLista;
+	nodoLista=record
+		dato:regLista;
+		sig:lista;
+	end;
+	
+	regArbol=record
+		matricula:integer;
+		atenciones:lista;
+	end;
+	
+	arbol=^nodo;
+	nodo=record
+		dato:regArbol;
+		HI:arbol;
+		HD:arbol;
+	end;
+	
+vector=array[rango_diag] of integer;
+
+procedure cargarArbol(var a:arbol);
+
+procedure guardarRegLista (var regL:regLista; ate:atencion);
+begin
+	regL.dni_paciente:=ate.dni_paciente;
+	regL.dia:=ate.dia;
+	regL.diag:=ate.diag;
+end;
+
+procedure leerAtencion(var a:atencion);
+begin
+	a.dni_paciente:=random(5);
+	if (a.dni_paciente <> dni_fin) then
+	begin
+		a.matricula:=random(20);
+		a.dia:=1+random(31-1+1);
+		a.diag:=1+random(10-1+1);
+	end;
+end;
+
+procedure agregarAdelante (var l:lista; regL:regLista);
+var
+	nue:lista;
+begin
+	new(nue);
+	nue^.dato:=regL;
+	nue^.sig:=l;
+	l:=nue;
+end;
+
+procedure insertarArbol (var a:arbol; regL:regLista; matricula:integer);
+begin
+	if (a= nil) then 
+	begin
+		new(a);
+		a^.dato.matricula:=matricula;
+		a^.dato.atenciones:=nil;
+		a^.HI:=nil;
+		a^.HD:=nil;
+		agregarAdelante(a^.dato.atenciones,regL);
+	end
+	else if (matricula = a^.dato.matricula) then
+		agregarAdelante(a^.dato.atenciones,regL)
+		
+		else if (matricula < a^.dato.matricula) then
+			insertarArbol(a^.HI,regL,matricula)
+			
+			else
+				insertarArbol(a^.HD,regL,matricula)
+end;
+
+var
+	ate:atencion;
+	regL:regLista;
+begin
+	leerAtencion(ate);
+	while (ate.dni_paciente <> dni_fin) do 
+	begin
+		guardarRegLista(regL,ate);
+		insertarArbol(a,regL,ate.matricula);
+		leerAtencion(ate);
+	end;
+end;
+	
+procedure imprimirArbol (a:arbol);
+procedure imprimirLista (l:lista);
+begin
+	while (l<>nil) do
+	begin
+		writeln('');
+		writeln('Dni del paciente: ',l^.dato.dni_paciente);
+		writeln('Dia de la consulta: ',l^.dato.dia);
+		writeln('Diagnostico: ',l^.dato.diag);
+		l:=l^.sig;
+	end;
+end;
+
+begin
+	if(a<>nil) then
+	begin
+		imprimirArbol(a^.HI);
+		writeln('');
+		writeln('[ --- Matricula del odontologo',a^.dato.matricula,' --- ]');
+		imprimirLista(a^.dato.atenciones);
+		imprimirArbol(a^.HD);
+	end;
+end;
+	
+procedure entreDosMatriculas (a:arbol; mA,mB,valor:integer; var cant:integer);	
+function buscarDni(l:lista; valor:integer):integer;
+var
+	cant:integer;
+begin
+	cant:=0;
+	while (l<>nil) do
+	begin
+		if (l^.dato.dni_paciente = valor) then
+			cant:=cant+1;
+		l:=l^.sig;
+	end;
+	buscarDni:=cant;
+end;
+
+begin
+	if (a<>nil) then
+	begin
+		if (a^.dato.matricula > mA) then
+			if (a^.dato.matricula < mB) then
+			begin
+				entreDosMatriculas(a^.HI,mA,mB,valor,cant);
+				cant:=cant + buscarDni(a^.dato.atenciones,valor);
+				entreDosMatriculas(a^.HD,mA,mB,valor,cant);
+			end
+			else
+				entreDosMatriculas(a^.HI,mA,mB,valor,cant)
+		else
+			entreDosMatriculas(a^.HD,mA,mB,valor,cant);
+	end;
+end;}
+
+{
+
+begin
+	if (a<>nil) then
+	begin
+		if (a^.dato.matricula > mA) then
+			if (a^.dato.matricula < mB) then
+			begin
+			
+				entreDosMatriculas:=buscarDni(a^.dato.atenciones,valor)+entreDosMatriculas(a^.HI,mA,mB,valor,cant)+	entreDosMatriculas(a^.HD,mA,mB,valor,cant);
+				
+			end
+			else
+				entreDosMatriculas(a^.HI,mA,mB,valor,cant)
+		else
+			entreDosMatriculas(a^.HD,mA,mB,valor,cant);
+	end;
+end;
+
+}
+
+
+procedure inicializarVector (var v:vector);
+var
+	i:rango_diag;
+begin
+	for i := 1 to max_diag do
+		v[i]:=0;
+end;
+
+procedure cantidadAtenciones (a:arbol; var v:vector);
+procedure cargarVector (l:lista; var v:vector);
+begin
+	while (l<>nil) do
+	begin
+		v[l^.dato.diag]:=v[l^.dato.diag] +1;
+		l:=l^.sig;
+	end;
+end;
+
+begin
+	if (a<>nil) then
+	begin
+	cantidadAtenciones	(a^.HI,v);
+	cargarVector(a^.dato.atenciones,v);
+	cantidadAtenciones	(a^.HD,v);
+	end;
+end;
+
+procedure imprimirVector (v:vector);
+var
+	i:rango_diag;
+begin
+	for i := 1 to max_diag do
+	begin
+		writeln('diagnostico ',i, ' cantidad de atenciones ',v[i]);
+	end;
+end;
+
+// programa principal	
+var
+	a:arbol;
+	matriA,matriB,valor:integer;
+	cant:integer;
+	v:vector;
+begin
+	a:=nil;
+	randomize;
+	cargarArbol(a);
+	imprimirArbol(a);
+	writeln('');
+	cant:=0;
+	writeln('Ingresar matricula  A');readln(matriA);
+	writeln('Ingresar matricula  B');readln(matriB);
+	writeln('Ingresar un valor');readln(valor);
+	entreDosMatriculas(a,matriA,matriB,valor,cant);
+	writeln('La cantidad de atenciones realizadas por el cliente son: ',cant);
+	writeln('');
+	inicializarVector(v);
+	cantidadAtenciones(a,v);
+	imprimirVector (v);
+end.
