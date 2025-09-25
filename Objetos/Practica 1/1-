@@ -1,0 +1,27 @@
+
+package tema1;
+import PaqueteLectura.GeneradorAleatorio;
+
+/**
+ *
+ * @author valen
+ */
+public class Ejercicio01 {
+
+    public static void main(String[] args) {
+        GeneradorAleatorio.iniciar();
+        int []vector = new int [11];
+        int dimL=0;
+        int num;
+         num= GeneradorAleatorio.generarInt(20);
+        while (dimL<= 10 && num != 11 ){
+            num= GeneradorAleatorio.generarInt(20);
+            vector[dimL]=num;
+            dimL++;
+        }
+        
+        for  ( dimL =0 ; dimL<=10 ;dimL++){
+           System.out.println(vector[dimL]*2);
+       }  
+    }    
+}
