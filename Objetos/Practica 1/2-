@@ -1,0 +1,32 @@
+
+package practicas;
+import PaqueteLectura.GeneradorAleatorio;
+public class p1ej2 {
+	public static void main(String[] args) {
+                    // vector de jugadores 
+                    int DF = 15;
+                    double [] vector= new double[DF];
+                    
+                    // declaro variables e indice
+                    int i;
+                    double total=0;
+                    int cant=0;
+                    GeneradorAleatorio.iniciar();
+                    // cargo el vector
+                     for (i=0;i<DF;i++){
+                         vector[i]= 1+ GeneradorAleatorio.generarDouble(100);
+                         total+=vector[i];
+                     }
+                     // calculo el promedio de alturas
+                       double promedio=total/DF;
+                     
+                       System.out.println("El promedio de altura de los jugadores es: "+promedio);
+                       
+                    // busco los jugadores con una altura mayor al prom   
+                     for (i =0 ; i<DF; i++)
+                          if (vector[i]>promedio)
+                              cant++;
+                     
+                    System.out.println("La cantidad de jugadores con una altura superior al promedio es: "+cant);
+	}
+}
