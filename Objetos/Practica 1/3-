@@ -1,0 +1,56 @@
+package practicas;
+import PaqueteLectura.GeneradorAleatorio;
+import PaqueteLectura.Lector;
+public class p1ej3 {
+	public static void main(String[] args) {
+                    //declaro al matriz   
+                        int [][] matriz = new int [5][5];
+                        int [] vectorC = new int[5];
+                    // declaro los indices
+                        int i;
+                        int j;
+                        int filaUno=0;
+                        int suma=0;
+                        boolean esta=false;
+                        GeneradorAleatorio.iniciar();
+                   // cargo la matriz con numero aleatorios entre 0 y 30
+                        for (i=0; i<5; i++)
+                            for (j=0;j<5;j++)
+                            matriz[i][j]= GeneradorAleatorio.generarInt(30);
+                        
+                        // Imprimo la matriz generada
+                        for (i=0; i<5; i++){
+                                System.out.println("--------------");
+                            for (j=0;j<5;j++)
+                              System.out.print("("+i+","+j+") "+matriz[i][j]+" | ");
+                        }
+                        System.out.println("--------------");
+                        for(i=0;i<5;i++)
+                            filaUno+=matriz[0][i];
+                        System.out.println("--------------");
+                        System.out.println("Suma de los elemtnos de la fila 1: "+filaUno);
+                        
+                        // INCISO C
+                        for (i=0; i<5; i++){
+                             for (j=0;j<5;j++)
+                                suma+=matriz[j][i];
+                             vectorC[i]=suma;
+                            }
+                        System.out.println("--------------");
+                       for(i=0; i<5;i++)
+                             System.out.print(vectorC[i]+" | ");
+                       
+                       System.out.println("");
+                       System.out.println("Ingresar un valor para buscarlo en la matriz: ");
+                       int num=Lector.leerInt();
+                        for (i=0; i<5; i++){
+                             for (j=0;j<5;j++)
+                                if (matriz[i][j]==num)
+                                    esta=true;
+                        }
+                        if (esta)
+                            System.out.println("El valor ingresado esta");
+                            else
+                                System.out.println("El valor ingresado no esta");
+	}
+}
