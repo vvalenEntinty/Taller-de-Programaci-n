@@ -1,0 +1,34 @@
+package practicas;
+import PaqueteLectura.Lector;
+public class p1ej4{
+	public static void main(String[] args) {
+                    // declaro el vector 
+                    int [][] edificio = new int [8][4];
+                    
+                    int piso;
+                    int oficina;
+                    
+                    System.out.println("Ingrese un piso (1..8)");
+                    piso=Lector.leerInt();
+                    
+                    while(piso != 9) {
+                        System.out.println("Ingrese una oficina (1..4) ");
+                        oficina=Lector.leerInt();
+                        
+                          if (piso>=1 && piso<=8 && oficina>=1 && oficina <=4)
+                                edificio[piso-1][oficina-1]+=1;
+                        
+                        System.out.println("Ingrese un piso (1..8)");
+                        piso=Lector.leerInt();
+                       
+                    }
+                    
+        for (int i = 0; i < 8; i++) {
+            System.out.println("Piso " + (i+1) + ":");
+            for (int j = 0; j < 4; j++) {
+                System.out.print("  Oficina " + (j+1) + ": " + edificio[i][j] + " personas | ");
+            }
+            System.out.println();
+        }
+    }
+}
