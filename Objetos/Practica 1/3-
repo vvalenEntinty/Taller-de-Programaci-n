@@ -9,6 +9,8 @@ public class p1ej3 {
                     // declaro los indices
                         int i;
                         int j;
+                        int posj=0;
+                        int posi=0;
                         int filaUno=0;
                         int suma=0;
                         boolean esta=false;
@@ -45,11 +47,15 @@ public class p1ej3 {
                        int num=Lector.leerInt();
                         for (i=0; i<5; i++){
                              for (j=0;j<5;j++)
-                                if (matriz[i][j]==num)
+                                if (matriz[i][j]==num){
                                     esta=true;
+                                     posi=i;
+                                     posj=j;
+                                }
+                                   
                         }
                         if (esta)
-                            System.out.println("El valor ingresado esta");
+                            System.out.println("El valor esta en: "+"("+posi+","+posj+")");
                             else
                                 System.out.println("El valor ingresado no esta");
 	}
