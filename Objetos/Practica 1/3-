@@ -1,34 +1,62 @@
 package practicas;
+import PaqueteLectura.GeneradorAleatorio;
 import PaqueteLectura.Lector;
-public class p1ej4{
+public class p1ej3 {
 	public static void main(String[] args) {
-                    // declaro el vector 
-                    int [][] edificio = new int [8][4];
-                    
-                    int piso;
-                    int oficina;
-                    
-                    System.out.println("Ingrese un piso (1..8)");
-                    piso=Lector.leerInt();
-                    
-                    while(piso != 9) {
-                        System.out.println("Ingrese una oficina (1..4) ");
-                        oficina=Lector.leerInt();
+                    //declaro al matriz   
+                        int [][] matriz = new int [5][5];
+                        int [] vectorC = new int[5];
+                    // declaro los indices
+                        int i;
+                        int j;
+                        int posj=0;
+                        int posi=0;
+                        int filaUno=0;
+                        int suma=0;
+                        boolean esta=false;
+                        GeneradorAleatorio.iniciar();
+                   // cargo la matriz con numero aleatorios entre 0 y 30
+                        for (i=0; i<5; i++)
+                            for (j=0;j<5;j++)
+                            matriz[i][j]= GeneradorAleatorio.generarInt(30);
                         
-                          if (piso>=1 && piso<=8 && oficina>=1 && oficina <=4)
-                                edificio[piso-1][oficina-1]+=1;
+                        // Imprimo la matriz generada
+                        for (i=0; i<5; i++){
+                                System.out.println("--------------");
+                            for (j=0;j<5;j++)
+                              System.out.print("("+i+","+j+") "+matriz[i][j]+" | ");
+                        }
+                        System.out.println("--------------");
+                        for(i=0;i<5;i++)
+                            filaUno+=matriz[0][i];
+                        System.out.println("--------------");
+                        System.out.println("Suma de los elemtnos de la fila 1: "+filaUno);
                         
-                        System.out.println("Ingrese un piso (1..8)");
-                        piso=Lector.leerInt();
+                        // INCISO C
+                        for (i=0; i<5; i++){
+                             for (j=0;j<5;j++)
+                                suma+=matriz[j][i];
+                             vectorC[i]=suma;
+                            }
+                        System.out.println("--------------");
+                       for(i=0; i<5;i++)
+                             System.out.print(vectorC[i]+" | ");
                        
-                    }
-                    
-        for (int i = 0; i < 8; i++) {
-            System.out.println("Piso " + (i+1) + ":");
-            for (int j = 0; j < 4; j++) {
-                System.out.print("  Oficina " + (j+1) + ": " + edificio[i][j] + " personas | ");
-            }
-            System.out.println();
-        }
-    }
+                       System.out.println("");
+                       System.out.println("Ingresar un valor para buscarlo en la matriz: ");
+                       int num=Lector.leerInt();
+                        for (i=0; i<5; i++){
+                             for (j=0;j<5;j++)
+                                if (matriz[i][j]==num){
+                                    esta=true;
+                                     posi=i;
+                                     posj=j;
+                                }
+                                   
+                        }
+                        if (esta)
+                            System.out.println("El valor esta en: "+"("+posi+","+posj+")");
+                            else
+                                System.out.println("El valor ingresado no esta");
+	}
 }
