@@ -1,0 +1,78 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package Practica2;
+
+import PaqueteLectura.Lector;
+
+/**
+ *
+ * @author valen
+ */
+public class p2ej5 {
+
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String[] args) {
+        /* ORDEN
+            nombre del equipo local
+            nombre del equipo visitante
+            goles del local
+            goles del visitante    
+         */
+
+        Partido partido;
+
+        int df = 20;
+        int i = 0;
+        int dl = 0;
+        int cantRiver = 0;
+        int golesBoca=0;
+        Partido[] vector = new Partido[df];
+
+        partido = new Partido();
+        System.out.println("Ingresar el nombre del Equipo Local: ");
+        partido.setLocal(Lector.leerString());
+        System.out.println("Ingresar el nombre del Equipo Visitante: ");
+        partido.setVisitante(Lector.leerString());
+        System.out.println("Cantidad de goles del Equipo Local");
+        partido.setGolesLocal(Lector.leerInt());
+        System.out.println("Cantidad de goles del Equipo Visitante");
+        while ((i < df) && (!partido.getVisitante().equals("ZZZ"))) {
+            vector[i] = partido;
+            i++;
+            dl++;
+            partido = new Partido();
+            System.out.println("Ingresar el nombre del Equipo Local: ");
+            partido.setLocal(Lector.leerString());
+            System.out.println("Ingresar el nombre del Equipo Visitante: ");
+            partido.setVisitante(Lector.leerString());
+            System.out.println("Cantidad de goles del Equipo Local");
+            partido.setGolesLocal(Lector.leerInt());
+
+        }
+        // Informar goles de cada partido
+        for (i = 0; i < dl; i++) {
+            System.out.println("EQUIPO-LOCAL " + vector[i].getGolesLocal() + " VS " + "EQUIPO-VISITANTE " + vector[i].getGolesVisitante());
+        }
+
+        // calcular e infromar la cantida de partidos que gano river
+        for (i = 0; i < dl; i++) {
+            if (vector[i].hayGanador()) {
+                if (vector[i].getGanador().equals("River")) {
+                    cantRiver++;
+                }
+            }
+            if(vector[i].getLocal().equals("Boca")){
+                golesBoca+=vector[i].getGolesLocal();
+            }
+           
+        }
+        System.out.println("Cantidad de partidos que ganó River "+cantRiver);
+        System.out.println("Total de goles que realizó Boca jugando de local "+golesBoca);
+    }
+
+}
