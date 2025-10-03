@@ -1,0 +1,116 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package Practica3;
+
+/**
+ *
+ * @author valen
+ */
+public class Triangulo {
+
+    private double ladoA;
+    private double ladoB;
+    private double ladoC;
+    private String colorRelleno;
+    private String colorLinea;
+
+    public Triangulo() {
+
+    }
+
+    public double getLadoA() {
+        return ladoA;
+    }
+
+    public double getLadoB() {
+        return ladoB;
+    }
+
+    public double getLadoC() {
+        return ladoC;
+    }
+
+    public String getRelleno() {
+        return colorRelleno;
+    }
+
+    public String getLinea() {
+        return colorLinea;
+    }
+
+    public void setLadoA(double a) {
+        ladoA = a;
+    }
+
+    public void setLadoB(double b) {
+        ladoB = b;
+    }
+
+    public void setLadoC(double c) {
+        ladoC = c;
+    }
+
+    public void setRelleno(String relleno) {
+        colorRelleno = relleno;
+    }
+
+    public void setLinea(String linea) {
+        colorLinea = linea;
+    }
+
+    public Double calcularPerimetro() {
+        return (ladoA + ladoB + ladoC);
+    }
+
+    public Double calcularArea() {
+        double s = (ladoA + ladoB + ladoC) / 2;
+        return Math.sqrt(s * (s - ladoA) * (s - ladoB) * (s - ladoC));
+    }
+
+} 
+
+
+
+------------------------------------------
+
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package Practica3;
+
+import PaqueteLectura.Lector;
+
+/**
+ *
+ * @author valen
+ */
+public class p2ej1 {
+
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String[] args) {
+        Triangulo triangulo;
+
+        triangulo = new Triangulo();
+
+        System.out.println("Ingresar el lado A del triangulo");
+        triangulo.setLadoA(Lector.leerDouble());
+        System.out.println("Ingresar el lado B del triangulo");
+        triangulo.setLadoB(Lector.leerDouble());
+        System.out.println("Ingresar el lado C del triangulo");
+        triangulo.setLadoC(Lector.leerDouble());
+        System.out.println("Ingresar el color del relleno del triangulo");
+        triangulo.setRelleno(Lector.leerString());
+        System.out.println("Ingresar el color de la linea del triangulo");
+        triangulo.setLinea(Lector.leerString());
+        
+        System.out.println("El perimetro del triangulo es de: "+triangulo.calcularPerimetro());
+        System.out.println("El area del triangulo es de: "+triangulo.calcularArea());
+    }
+}
