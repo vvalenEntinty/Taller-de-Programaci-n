@@ -1,0 +1,55 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package Practica3;
+
+import Practica2.*;
+
+/**
+ *
+ * @author valen
+ */
+public class Autor {
+    private String nombre;
+    private String bio;
+    private String origen;
+    
+    public Autor (String unNombre, String unBio, String unOrigen){
+        nombre=unNombre;
+        bio=unBio;
+        origen=unOrigen;
+    }
+    
+    public Autor(){
+        
+    }
+    
+    public void setNombre (String nombreAutor){
+        nombre=nombreAutor;
+    }
+    public void setBio(String bioAutor){
+        bio=bioAutor;
+    }
+    public void setOrigen (String origenAutor){
+        origen=origenAutor;
+    }
+    public String getNombre(){
+        return nombre;
+    }
+    public String getBio(){
+        return bio;
+    }
+    public String getOrigen(){
+        return origen;
+    }
+    @Override 
+    public String toString(){
+        String aux;
+        aux=" nombre "+nombre+" biografia "+bio+" origen "+origen;
+        return aux;
+    }
+   
+    
+}
