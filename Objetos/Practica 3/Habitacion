@@ -1,0 +1,57 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package Practica3;
+
+import PaqueteLectura.GeneradorAleatorio;
+
+/**
+ *
+ * @author valen
+ */
+public class Habitacion {
+
+    private double costoNoche;
+    private boolean estaOcupada;
+    private Cliente cliente;
+
+    public Habitacion() {
+    }
+
+    public Habitacion(double costoNoche, boolean estaOcupada, Cliente cliente) {
+        this.costoNoche = 2000 + GeneradorAleatorio.generarDouble(6000);
+        this.estaOcupada = false;
+        this.cliente = null;
+    }
+
+    public double getCostoNoche() {
+        return costoNoche;
+    }
+
+    public Cliente getCliente() {
+        return cliente;
+    }
+
+    public void setCliente(Cliente cliente) {
+        this.cliente = cliente;
+    }
+
+    public void setCostoNoche(double costoNoche) {
+        this.costoNoche = costoNoche;
+    }
+
+    public boolean isEstaOcupada() {
+        return estaOcupada;
+    }
+
+    public void setEstaOcupada(boolean estaOcupada) {
+        this.estaOcupada = estaOcupada;
+    }
+
+    public void guardarCliente(Cliente cliente) {
+        this.cliente = cliente;
+        this.estaOcupada = true;
+    }
+}
