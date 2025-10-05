@@ -1,25 +1,55 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package Practica3;
 
-/**
- *
- * @author valen
- */
 public class Estante {
-    private int libro;
-    
-    
-    public Estante(){   
+
+    public int MAX_LIBROS;
+    private Libro[] libros;
+    private int cantidad;
+
+    public Estante(int N) {
+        MAX_LIBROS=N;
+        libros = new Libro[MAX_LIBROS];
+        cantidad = 0;
     }
-    
-    public Estante (int libros){
-        libro=libros;
+
+    public void agregarLibro(Libro l) {
+
+        if (cantidad < MAX_LIBROS) {
+            libros[cantidad] = l;
+            cantidad++;
+        } else {
+            System.out.println("El estante está lleno.");
+        }
     }
+
+    public void mostrarLibros() {
+        System.out.println("Cantidad cargada: " + cantidad);
+        for (int i = 0; i < cantidad; i++) {
+            System.out.println((i + 1) + ". " + libros[i]);
+        }
+    }
+
+    public int getCantidad() {
+        return cantidad;
+    }    
     
-    
-    
+
+    public String buscarAutor(String titulo) {
+        int i = 0;
+        String autor="";
+        boolean esta=false;
+        while ((i < cantidad) && (!esta)) {
+            if (libros[i].getTitulo().equals(titulo)) {
+                esta=true;
+                autor = libros[i].getPrimerAutor();
+            } else {
+                i++;
+            }
+        }
+        if (esta)
+            return autor;
+        else 
+            return "El libro Mujercitas no se encuentra en la estanteria";
+    }
 }
+
