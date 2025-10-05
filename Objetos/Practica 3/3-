@@ -1,0 +1,63 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package Practica3;
+
+import PaqueteLectura.Lector;
+
+/**
+ *
+ * @author valen
+ */
+public class ej3p3 {
+
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String[] args) {
+        int df = 20;
+        int dl = 0;
+        Estante estante = new Estante(20);
+        Libro libro;
+        
+        libro = new Libro();
+        System.out.println("Ingresar el titulo del libro");
+        libro.setTitulo(Lector.leerString());
+        
+        System.out.println("Ingresar la editorial");
+        libro.setEditorial(Lector.leerString());
+        
+        System.out.println("Ingresar el primer autor");
+        libro.setPrimerAutor(Lector.leerString());
+        
+        System.out.println("Ingresar el ISBN");
+        libro.setISBN(Lector.leerString());
+        
+        estante.agregarLibro(libro);
+        
+        while ((dl < df) && (!libro.getTitulo().equals("zzz"))) {
+            libro = new Libro();
+            System.out.println("Ingresar el titulo del libro");
+            libro.setTitulo(Lector.leerString());
+
+            if (!libro.getTitulo().equals("zzz")) {
+                System.out.println("Ingresar la editorial");
+                libro.setEditorial(Lector.leerString());
+                
+                System.out.println("Ingresar el primer autor");
+                libro.setPrimerAutor(Lector.leerString());
+                
+                System.out.println("Ingresar el ISBN");
+                libro.setISBN(Lector.leerString());
+                
+                estante.agregarLibro(libro);
+                dl++;
+            }
+        }
+        estante.mostrarLibros();
+        String autor = estante.buscarAutor("Mujercitas");
+        System.out.println("Autor de las mujercitas: "+autor);
+    }
+}
