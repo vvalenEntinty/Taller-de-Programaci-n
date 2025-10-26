@@ -1,0 +1,138 @@
+a)
+programa ejemplo
+procesos
+  proceso juntarFlores (ES sinFlor:numero;ES floresCont:numero)
+  comenzar
+    si (HayFlorEnLaEsquina)
+      mientras(HayFlorEnLaEsquina)
+        tomarFlor
+        floresCont:=floresCont+1
+    sino 
+      sinFlor:=sinFlor + 1
+  fin
+  proceso recorrerAvenida(E av:numero; ES sinFlor:numero; ES floresDepositadas:numero)
+  variables
+    floresCont:numero
+  comenzar
+    floresCont:=0
+    Pos(av, 1)
+    repetir 99
+      juntarFlores(sinFlor,floresCont)
+      mover
+    juntarFlores(sinFlor,floresCont)
+    mientras (floresCont > 0)
+      depositarFlor
+      floresCont:=floresCont -1
+      floresDepositadas:=floresDepositadas +1
+  fin
+areas
+  ciudad: AreaC (1,1,100,100)
+  
+robots
+  robot robot1
+  variables
+    sinFlor:numero
+    floresDepositadas:numero
+    AvNumero:numero
+  comenzar
+    AvNumero:=1
+    repetir (3)
+      sinFlor:=0
+      floresDepositadas:=0
+      recorrerAvenida(AvNumero,sinFlor,floresDepositadas)
+      Informar("Avenida ",AvNumero)
+      Informar("Esquinas sin flores ",sinFlor)
+      Informar("Flores depositadas ",floresDepositadas)
+      AvNumero:=AvNumero+2
+  fin
+
+variables
+  R_info: robot1
+comenzar
+  AsignarArea(R_info, ciudad)
+  Iniciar(R_info, 1,1)
+fin
+
+----------------------------------------------------------
+
+b)
+programa ejemplo
+procesos
+  proceso juntarFlores (ES sinFlor:numero;ES floresCont:numero)
+  comenzar
+    si (HayFlorEnLaEsquina)
+      mientras(HayFlorEnLaEsquina)
+        tomarFlor
+        floresCont:=floresCont+1
+    sino 
+      sinFlor:=sinFlor + 1
+  fin
+  proceso recorrerAvenida(E av:numero; ES sinFlor:numero; ES floresDepositadas:numero)
+  variables
+    floresCont:numero
+  comenzar
+    floresCont:=0
+    Pos(av, 1)
+    repetir 99
+      juntarFlores(sinFlor,floresCont)
+      mover
+    juntarFlores(sinFlor,floresCont)
+    mientras (floresCont > 0)
+      depositarFlor
+      floresCont:=floresCont -1
+      floresDepositadas:=floresDepositadas +1
+  fin
+areas
+  ciudad: AreaC (1,1,100,100)
+  
+robots
+  robot robot1
+  variables
+    sinFlor:numero
+    floresDepositadas:numero
+  comenzar
+    sinFlor:=0
+    floresDepositadas:=0
+    recorrerAvenida(1,sinFlor,floresDepositadas)
+    Informar("Avenida ",1)
+    Informar("Esquinas sin flores ",sinFlor)
+    Informar("Flores depositadas ",floresDepositadas)
+  fin
+  robot robot2
+  variables
+    sinFlor:numero
+    floresDepositadas:numero
+  comenzar
+    sinFlor:=0
+    floresDepositadas:=0
+    recorrerAvenida(3,sinFlor,floresDepositadas)
+    Informar("Avenida ",3)
+    Informar("Esquinas sin flores ",sinFlor)
+    Informar("Flores depositadas ",floresDepositadas)
+  fin
+  robot robot3
+  variables
+    sinFlor:numero
+    floresDepositadas:numero
+  comenzar
+    sinFlor:=0
+    floresDepositadas:=0
+    recorrerAvenida(5,sinFlor,floresDepositadas)
+    Informar("Avenida ",5)
+    Informar("Esquinas sin flores ",sinFlor)
+    Informar("Flores depositadas ",floresDepositadas)
+  fin
+variables
+  bot1: robot1
+  bot2: robot2
+  bot3: robot3
+comenzar
+  AsignarArea(bot1, ciudad)
+  AsignarArea(bot2, ciudad)
+  AsignarArea(bot3, ciudad)
+  Iniciar(bot1, 1,1)
+  Iniciar(bot2, 3,1)
+  Iniciar(bot3, 5,1)
+fin
+
+
