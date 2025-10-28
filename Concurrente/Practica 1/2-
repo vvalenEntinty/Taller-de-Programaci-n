@@ -1,0 +1,62 @@
+programa ejemplo
+procesos 
+  proceso girar (E num:numero)
+  comenzar
+    repetir num
+      derecha
+  fin
+  
+  proceso juntarFlores
+  comenzar 
+    mientras(HayFlorEnLaEsquina)
+      tomarFlor
+  fin 
+  proceso recorrer (E giro:numero)
+  comenzar
+    girar(giro)
+    repetir 19
+      juntarFlores
+      mover
+  fin
+
+  
+areas
+  ciudad: AreaC (10,10,29,29)
+  
+robots
+  robot robot1
+  comenzar
+    recorrer(0)
+  fin
+  
+  robot robot2
+  comenzar
+    recorrer(1)
+  fin
+  
+  robot robot3
+  comenzar
+    recorrer(2)
+  fin
+  
+  robot robot4
+  comenzar
+    recorrer(3)
+  fin
+  
+variables
+  bot1: robot1
+  bot2: robot2
+  bot3: robot3
+  bot4: robot4
+comenzar
+  AsignarArea(bot1, ciudad)
+  AsignarArea(bot2,ciudad)
+  AsignarArea(bot3,ciudad)
+  AsignarArea(bot4,ciudad)
+  Iniciar(bot1, 10,10)
+  Iniciar(bot2,10,29)
+  Iniciar(bot3,29,29)
+  Iniciar(bot4,29,10)
+
+fin
