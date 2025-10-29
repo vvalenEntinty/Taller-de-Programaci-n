@@ -1,0 +1,93 @@
+programa ejemplo
+procesos
+  proceso juntarFlores(ES contFlores:numero)
+  comenzar
+    mientras (HayFlorEnLaEsquina)
+      tomarFlor
+      contFlores:=contFlores+1
+  fin
+  proceso juntarPapeles(ES contPapeles:numero)
+  comenzar
+    mientras (HayPapelEnLaEsquina)
+      tomarPapeles
+      contPapeles:=contPapeles+1
+  fin
+  proceso recorrerAvenida(E aumen: numero; ES supera:boolean)
+  variables
+    contFlores:numero
+    contPapeles:numero
+  comenzar
+    contFlores:=0
+    contPapeles:=0
+    supera:=F
+    repetir aumen
+      juntarFlores(contFlores)
+      juntarPapeles(contPapeles)
+      mover
+    derecha
+    repetir aumen
+      juntarFlores(contFlores)
+      juntarPapeles(contPapeles)
+      mover
+    repetir 3
+      derecha
+    si (contFlores = contPapeles+1)
+      supera:=V
+  fin
+areas
+  ciudad: AreaC (1,1,100,100)
+robots
+  robot robot1
+  variables 
+    aux:numero
+    supera:boolean
+    cantEscalonesSupera:numero
+  comenzar
+    aux:=1
+    cantEscalonesSupera:=0    
+    repetir 4
+      recorrerAvenida(aux,supera)
+      si(supera)
+        cantEscalonesSupera:=cantEscalonesSupera+1
+      aux:=aux*2
+  fin
+  robot robot2
+  variables 
+    aux:numero
+    supera:boolean
+    cantEscalonesSupera:numero
+  comenzar
+    aux:=1
+    cantEscalonesSupera:=0
+    repetir 4
+      recorrerAvenida(aux,supera)
+      si(supera)
+        cantEscalonesSupera:=cantEscalonesSupera+1
+      aux:=aux*2
+  fin
+  robot robot3
+  variables 
+    aux:numero
+    supera:boolean
+    cantEscalonesSupera:numero
+  comenzar
+    aux:=1
+    cantEscalonesSupera:=0
+    repetir 4
+      recorrerAvenida(aux,supera)
+      si(supera)
+        cantEscalonesSupera:=cantEscalonesSupera+1
+      aux:=aux*2
+  fin
+variables
+  bot1: robot1
+  bot2: robot2
+  bot3: robot3
+comenzar
+  AsignarArea(bot1, ciudad)
+  AsignarArea(bot2, ciudad)
+  AsignarArea(bot3, ciudad)
+  Iniciar(bot1,14,12)
+  Iniciar(bot2,10,17)
+  Iniciar(bot3,6,22)  
+fin
