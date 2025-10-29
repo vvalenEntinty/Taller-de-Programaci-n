@@ -9,7 +9,7 @@ procesos
   proceso juntarPapeles(ES contPapeles:numero)
   comenzar
     mientras (HayPapelEnLaEsquina)
-      tomarPapeles
+      tomarPapel
       contPapeles:=contPapeles+1
   fin
   proceso recorrerAvenida(E aumen: numero; ES supera:boolean)
@@ -31,11 +31,11 @@ procesos
       mover
     repetir 3
       derecha
-    si (contFlores = contPapeles+1)
+    si (contFlores = (contPapeles+1))
       supera:=V
   fin
 areas
-  ciudad: AreaC (1,1,100,100)
+  ciudad: AreaC (6,12,30,40)
 robots
   robot robot1
   variables 
@@ -50,6 +50,7 @@ robots
       si(supera)
         cantEscalonesSupera:=cantEscalonesSupera+1
       aux:=aux*2
+    Informar(cantEscalonesSupera)
   fin
   robot robot2
   variables 
@@ -64,6 +65,7 @@ robots
       si(supera)
         cantEscalonesSupera:=cantEscalonesSupera+1
       aux:=aux*2
+    Informar(cantEscalonesSupera)
   fin
   robot robot3
   variables 
@@ -78,6 +80,7 @@ robots
       si(supera)
         cantEscalonesSupera:=cantEscalonesSupera+1
       aux:=aux*2
+    Informar(cantEscalonesSupera)
   fin
 variables
   bot1: robot1
