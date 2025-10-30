@@ -1,0 +1,71 @@
+programa Practica2_Ejercicio1
+procesos
+  proceso juntarFlor(ES cantFlores:numero)
+  comenzar
+    mientras(HayFlorEnLaEsquina)
+      tomarFlor
+      cantFlores:=cantFlores+1
+  fin
+  proceso Recorrer(ES cantFlores:numero)
+  comenzar
+    cantFlores:=0
+    repetir 9
+      juntarFlor(cantFlores)
+      mover
+    juntarFlor(cantFlores) 
+  fin
+  
+  proceso calcularMaximo (ES max:numero; E cant:numero)
+  comenzar
+    si (cant > max)
+      max:=cant
+  fin
+  
+areas
+  area1:AreaP(1,1,1,10)
+  area2:AreaP(2,11,2,20)
+  area3:AreaP(3,21,3,30)
+  area4:AreaP(4,31,4,40)
+  area5:AreaP(5,41,5,50)
+  area6:AreaP(6,51,6,60)
+  areaFiscalizador:AreaP(2,1,2,1)
+  
+robots
+  robot robot1
+  variables 
+    cantFlores:numero
+  comenzar
+    Recorrer(cantFlores)
+    EnviarMensaje(cantFlores,fiscalizador)
+  fin
+  robot robotFiscalizador
+  variables
+    flores,max:numero
+  comenzar
+    max:=-1
+    repetir 6
+      RecibirMensaje(flores,*)
+      calcularMaximo(max,flores)
+    Informar(max)
+  fin 
+  
+  
+variables
+  bot1,bot2,bot3,bot4,bot5,bot6:robot1
+  fiscalizador:robotFiscalizador
+comenzar
+  AsignarArea(bot1,area1)
+  AsignarArea(bot2,area2)
+  AsignarArea(bot3,area3)
+  AsignarArea(bot4,area4)
+  AsignarArea(bot5,area5)
+  AsignarArea(bot6,area6)
+  AsignarArea(fiscalizador,areaFiscalizador)
+  Iniciar(bot1,1,1)
+  Iniciar(bot2,2,11)
+  Iniciar(bot3,3,21)
+  Iniciar(bot4,4,31)
+  Iniciar(bot5,5,41)
+  Iniciar(bot6,6,51)
+  Iniciar(fiscalizador,2,1)
+fin
