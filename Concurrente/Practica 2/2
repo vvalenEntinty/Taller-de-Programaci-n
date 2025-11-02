@@ -1,0 +1,68 @@
+  programa valen
+procesos
+  proceso agarrarFloresYPapeles(ES flores:numero; ES papeles:numero)
+  comenzar
+    flores:=0
+    papeles:=0
+    si(HayPapelEnLaEsquina)
+      mientras(HayPapelEnLaEsquina)
+        tomarPapel
+        papeles:=papeles+1
+    si(HayFlorEnLaEsquina)
+      mientras(HayFlorEnLaEsquina)
+        tomarFlor
+        flores:=flores+1
+  fin
+  proceso recorrer (ES escalones:numero)  
+  variables
+    altoRandom:numero
+    flores,papeles:numero
+  comenzar
+    escalones:=0
+    repetir 4
+      Random (altoRandom,1,5)
+      repetir altoRandom
+        mover
+      agarrarFloresYPapeles(flores,papeles)
+      si(flores>papeles)
+        escalones:=escalones+1
+      derecha
+      mover
+      repetir 3
+        derecha
+  fin
+areas
+  ciudad: AreaC (1,1,16,24)
+robots
+  robot robot1
+  variables
+    cantEscalones:numero
+  comenzar
+    recorrer(cantEscalones)
+    EnviarMensaje(cantEscalones,jefe)
+  fin
+
+  robot robotJefe
+  variables
+    total,cant:numero
+  comenzar
+    repetir 3
+      RecibirMensaje(cant,*)
+      total:=total+cant
+    Informar(total)
+  fin
+variables
+  r1:robot1
+  r2:robot1
+  r3:robot1
+  jefe:robotJefe
+comenzar
+  AsignarArea(r1,ciudad)
+  AsignarArea(r2,ciudad)
+  AsignarArea(r3,ciudad)
+  AsignarArea(jefe,ciudad)
+  Iniciar(r1,2,1)
+  Iniciar(r2,7,1)
+  Iniciar(r3,12,1)
+  Iniciar(jefe,1,1)
+fin
