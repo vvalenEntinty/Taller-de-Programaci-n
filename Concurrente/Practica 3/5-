@@ -1,0 +1,92 @@
+programa valen
+procesos
+  proceso calcularGanador (ES maxcalle:numero;ES maxid:numero; E calle:numero; E id:numero)
+  comenzar
+    si(calle>maxcalle)
+      maxcalle:=calle
+      maxid:=id
+  fin
+
+areas
+  pista1: AreaP (4,1,4,100)
+  pista2: AreaP (6,1,6,100)
+  pista3: AreaP (8,1,8,100)
+  pista4: AreaP (10,1,10,100)
+  fuente: AreaPC (11,11,11,11)
+  areaCoord: AreaP(1,1,1,1)
+robots
+  robot corredor
+  variables
+    caPista:numero
+    avPista:numero
+    termino:boolean
+    miId:numero
+  comenzar
+    caPista:=1
+    termino:=F
+    avPista:=PosAv
+    caPista:=PosCa
+    RecibirMensaje(miId,rcoord)
+    mientras((caPista < 99)&(termino=F))
+      BloquearEsquina(11,11)
+      Pos(11,11)
+      si(HayPapelEnLaEsquina)
+        tomarPapel
+        caPista:=caPista+1
+      sino
+        termino:=V
+      Pos(avPista,caPista)
+      mover
+      LiberarEsquina(11,11)
+    EnviarMensaje(miId,rcoord)
+    EnviarMensaje(caPista,rcoord)
+  fin
+  robot coordinador
+  variables
+    id:numero
+    maxcalle,maxid:numero
+    calle:numero
+  comenzar  
+    EnviarMensaje(1,r1)
+    EnviarMensaje(2,r2)
+    EnviarMensaje(3,r3)
+    EnviarMensaje(4,r4)
+    maxcalle:=-1
+    repetir 4
+      RecibirMensaje(id,*)
+      si(id=1)
+        RecibirMensaje(calle,r1)
+      sino
+        si(id=2)
+          RecibirMensaje(calle,r2)
+        sino
+          si (id=3)
+            RecibirMensaje(calle,r3)
+          sino
+            si(id=4)
+              RecibirMensaje(calle,r4)
+      calcularGanador(maxcalle,maxid,calle,id)
+    Informar(maxid)
+  fin     
+variables
+  r1:corredor
+  r2:corredor
+  r3:corredor
+  r4:corredor
+  rcoord:coordinador
+comenzar
+  AsignarArea(r1,pista1)
+  AsignarArea(r1,fuente)
+  AsignarArea(r2,pista2)
+  AsignarArea(r2,fuente)
+  AsignarArea(r3,pista3)
+  AsignarArea(r3,fuente)
+  AsignarArea(r4,pista4)
+  AsignarArea(r4,fuente)
+  AsignarArea(rcoord,areaCoord)
+  Iniciar(r1,4,1)
+  Iniciar(r2,6,1)
+  Iniciar(r3,8,1)
+  Iniciar(r4,10,1)
+  Iniciar(rcoord,1,1)
+fin
